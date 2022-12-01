@@ -1,3 +1,5 @@
 This is the content of my file
 
 I am going to add my paragraph here so that I fix my issue
+
+Second edited version to check merges
