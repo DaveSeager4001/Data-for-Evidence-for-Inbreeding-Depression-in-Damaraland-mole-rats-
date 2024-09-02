@@ -76,7 +76,7 @@ plot(residuals1)
 #### maternal ID is included as a random effect
 
 model2 <- glmmTMB(InterBirth_rel ~ Treatment + GroupSize + Density + (1|MaternalID),
-                data = InterBirthInterval_Dataset, 
+                data = InterBirthInterval_Dataset1, 
                 family = Gamma(link = "log"))
 summary(model2)
 residuals2 <- simulateResiduals(model2)
@@ -295,8 +295,15 @@ p4 <- p4 +
   #annotate("text", x = 36, y = 0.25, label = "Outbred", colour = "dodgerblue")
 
 # Combine the plots together with patchwork
-(p1 | p2) / (p3 | p4)
+figure1<-(p1 | p2) / (p3 | p4)
 
+ggsave("Figure1.tiff",
+       plot = Figure1,
+       device = "tiff",
+       width = 6,
+       height = 6,
+       units = "in",
+       dpi = 600)
 
 #=============================
 
@@ -306,6 +313,8 @@ p4 <- p4 +
 
 # Overall the body weights data set consists of 9126 weights from 92 individuals (40 females and 52 males)  
 # Before modelling body mass growth, we need to separate the two sexes. 
+
+IBWeights<LifetimeWeights_Dataset
 
 # Due to the high degree of sexual dimorphism the sexes should be modelled separately
 Male   <- filter(IBWeights, Sex == "M") %>% 
@@ -771,6 +780,8 @@ p_bodymassindcurves <- (p_bodymass_femaleind / p_bodymass_maleind) +
 #---------------------------------------------------------------
 
 # Here we use a monophasic form of the monomolecular model as specified directly in nls/nlme formula. 
+
+Skeletal_Dataset<-LifetimeSkeletal_Dataset
 
 # As for body mass we want to model males and females separately
 MaleSkel <- filter(Skeletal_Dataset, Sex == "M") %>% 
@@ -1489,4 +1500,19 @@ p_all <- (p_bodymass2 +
   (p_teethwidth2 + 
      theme(plot.margin = margin(t = 5)))
 
+Figure2<-p_all <- (p_bodymass2 + 
+            theme(plot.margin = margin(t = 5))) / 
+  (p_bodylength2  + 
+     theme(plot.margin = margin(t = 5))) / 
+  (p_teethwidth2 + 
+     theme(plot.margin = margin(t = 5)))
+
 ############################## END #########################################
+
+ggsave("Figure2.tiff",
+       plot = Figure2,
+       device = "tiff",
+       width = 6,
+       height = 6,
+       units = "in",
+       dpi = 600)
